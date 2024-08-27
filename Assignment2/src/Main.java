@@ -46,46 +46,40 @@ public class Main {
             public void actionPerformed(ActionEvent e) {
                 //Make these into array list
                 String[] printingStates = states.split(" ");
-                List<String> printingStates2 = new ArrayList<String>();;
+                List<String> printingStates2 = new ArrayList<>();
                 // String Array that splits on seperate criteria.
                 for(int i = 0; i < printingStates.length; i++)
                 // Condition one if the word is New.
                 {   // Add New and the next word into that array together.
-                    if(printingStates[i].equals("New"))
-                    {
+                    switch (printingStates[i]) {
+                        case "New" -> {
 
-                        printingStates2.add(printingStates[i] + " " + printingStates[i+1]);
-                        i++;
-                    }
+                            printingStates2.add(printingStates[i] + " " + printingStates[i + 1]);
+                            i++;
+                        }
 
 
-                    // Condition two if the word is North.
-                    else if(printingStates[i].equals("North"))
-                    {
-                        // Add North and the next word into that array together.
-                        printingStates2.add(printingStates[i] + " " + printingStates[i+1]);
-                        i++;
-                    }
+                        // Condition two if the word is North.
+                        case "North" -> {
+                            // Add North and the next word into that array together.
+                            printingStates2.add(printingStates[i] + " " + printingStates[i + 1]);
+                            i++;
+                        }
 
-                    // Condition three if the word is South.
-                    else if(printingStates[i].equals("South"))
-                    {
-                        // Add South and the next word into that array together.
-                        printingStates2.add(printingStates[i] + " " + printingStates[i+1]);
-                        i++;
-                    }
+                        // Condition three if the word is South.
+                        case "South" -> {
+                            // Add South and the next word into that array together.
+                            printingStates2.add(printingStates[i] + " " + printingStates[i + 1]);
+                            i++;
+                        }
 
-                    // Condition four if the word is West.
-                    else if(printingStates[i].equals("West"))
-                    {
-                        // Add West and the next word into that array together.
-                        printingStates2.add(printingStates[i] + " " + printingStates[i+1]);
-                        i++;
-                    }
-
-                    else {
-                        printingStates2.add(printingStates[i]);
-
+                        // Condition four if the word is West.
+                        case "West" -> {
+                            // Add West and the next word into that array together.
+                            printingStates2.add(printingStates[i] + " " + printingStates[i + 1]);
+                            i++;
+                        }
+                        default -> printingStates2.add(printingStates[i]);
                     }
 
 
@@ -114,31 +108,25 @@ public class Main {
                 String searchString = JOptionPane.showInputDialog("Enter letters to search on? ");
 
 
-                List<String> searchStringIterabe = new ArrayList<String>();;
-                List<Integer> searchComparison = new ArrayList<Integer>();
+                List<String> searchStringIterabe = new ArrayList<>();
+                List<Integer> searchComparison = new ArrayList<>();
 
                 //take searchString and perform the bad- character search on it.
                 // Use the length of searchString to dictate how long each comparison will take place on states.
-                searchStringIterabe.add(searchString);;
+                searchStringIterabe.add(searchString);
 
                 JTextArea textArea = new JTextArea();
                 JScrollPane scrollPane = new JScrollPane(textArea);
                 scrollPane.setPreferredSize(new Dimension(100, 100));
                 textArea.setWrapStyleWord(true);
-                scrollPane.setVerticalScrollBarPolicy(
-                        JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+                scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
                 int i = 0;
-                //Ensuring that we go thru all of the states.
+                // Ensuring that we go through all of states string.
                 while (i < states.length())
                 {
-                    // method to load the states characters into an array starting at i and ending at searchString.length(). (pass in i so starting point is correct)
-                    // public static void loadArray(String[] array, String states, int i, int searchString.Length())
-                    // clear searchComparison list.
-                    // m == i;
+                    loadList(searchStringIterabe,states,i,searchString.length());
 
-                    // while (m < searchString.length()+m)
-                    // add each character from state(m) to searchComparison list (m-m).
-                    // m++
 
                     // method checkMismatch to identify if there is a mismatch with each character of searchString starting from the right.
                     // public static checkMismatch(String[] searchComparison, String searchString, int searchString.length())
@@ -183,7 +171,18 @@ public class Main {
         });
 
     }
+    // method to load the states characters into an array starting at i and ending at searchString.length(). (pass in i so starting point is correct)
+    public static List<String> loadList(List<String> output, String states, int i, int length) {
+        output.clear();
+        int m = i;
 
+        while (m < length) {
+            //add each character from state(m) to searchComparison list (m-m).
+            output.add(Character.toString(states.charAt(m)));
+            m++;
+        }
+        return output;
+    }
 
 
 }
