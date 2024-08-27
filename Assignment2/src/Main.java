@@ -107,13 +107,8 @@ public class Main {
             public void actionPerformed(ActionEvent e) {
                 String searchString = JOptionPane.showInputDialog("Enter letters to search on? ");
 
-
-                List<String> searchStringIterabe = new ArrayList<>();
-                List<Integer> searchComparison = new ArrayList<>();
-
-                //take searchString and perform the bad- character search on it.
-                // Use the length of searchString to dictate how long each comparison will take place on states.
-                searchStringIterabe.add(searchString);
+                List<String> searchComparison = new ArrayList<>();
+                List<Integer> matchOutput = new ArrayList<>();
 
                 JTextArea textArea = new JTextArea();
                 JScrollPane scrollPane = new JScrollPane(textArea);
@@ -122,33 +117,14 @@ public class Main {
                 scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
                 int i = 0;
-                // Ensuring that we go through all of states string.
-                while (i < states.length())
-                {
-                    loadList(searchStringIterabe,states,i,searchString.length());
-
-
-                    // method checkMismatch to identify if there is a mismatch with each character of searchString starting from the right.
-                    // public static checkMismatch(String[] searchComparison, String searchString, int searchString.length())
-                    // must check front right to left
-                    // k == searchString.length() -1;
-                    // while (k >= 0)
-                    // check if each character does not match each other. ie bad character
-                    // if (searchComparison(k) != searchString(k))
-                    // call checkMatchSubstring(k)
-                    // break;
-
-                    // check if each character matches each other.
-                    // if(searchComparison(k) == searchString(k))
-                    // if (k == 0)
-                    // add index of first character where match started to searchComparison list.
-                    // searchComparison.add(i)
-                    // break;
-                    // k must be incremented so the while loop completes.
-                    // k--
+                // Ensuring that we go through the entirety of states string.
+                while (i < states.length()) {
+                    loadList(searchComparison, states, i, searchString.length());
 
                 }
-                // method checkMatchSubstring it's purpose is to see iffhe bad character matches any character in the substring or not.
+
+
+                // method checkMatchSubstring it's purpose is to see if the bad character matches any character in the substring or not.
                 //   If the bad character does exist in substring then move i to where the bad char matches the character in searchString.
                 // call method moveToMatch
                 // for each element of searchString
@@ -159,8 +135,8 @@ public class Main {
                 // call method movePastMismatch
                 //move past bad character
                 // i = i + (k+2);
-                textArea.append(searchComparison + "\n");
-                JOptionPane.showMessageDialog(null, scrollPane, "List of states", JOptionPane.PLAIN_MESSAGE);
+                textArea.append(matchOutput + "\n");
+                JOptionPane.showMessageDialog(null, scrollPane, "List of indices where matches have been made.", JOptionPane.PLAIN_MESSAGE);
             }});
 
         // This button exits the program when clicked.
@@ -170,20 +146,50 @@ public class Main {
             }
         });
 
+
+
+        // method to load the states characters into an array starting at i and ending at searchString.length(). (pass in i so starting point is correct)
+
+
     }
-    // method to load the states characters into an array starting at i and ending at searchString.length(). (pass in i so starting point is correct)
-    public static List<String> loadList(List<String> output, String states, int i, int length) {
-        output.clear();
+
+    public static void loadList(List<String> searchComparison, String states, int i, int length)
+    {
+        searchComparison.clear();
         int m = i;
 
         while (m < length) {
             //add each character from state(m) to searchComparison list (m-m).
-            output.add(Character.toString(states.charAt(m)));
+            searchComparison.add(Character.toString(states.charAt(m)));
             m++;
         }
-        return output;
     }
 
+    // method checkMismatch to identify if there is a mismatch with each character of searchString starting from the right.
+    public static void checkMismatch(List<String> searchComparison, String searchString, int searchStringLength, int i){
+    // must check front right to left
+        int k = searchStringLength - 1;
+        while (k >= 0) {
+    //check if each character does not match each other.ie bad character
+        if (searchComparison(k) != searchString(k)) {
+            //call checkMatchSubstring (k)
+
+         break;
+        }
+
+
+    // check if each character matches each other.
+      if (searchComparison(k) == searchString(k)) {
+
+      }
+       if (k == 0) {
+           // add index of first character where match started to searchComparison list.
+           searchComparison.add(Integer.toString(i));
+           break;
+        }
+    //k must be decremented so the while loop ends.
+       k--;
+     }
 
 }
 

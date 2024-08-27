@@ -1,0 +1,4 @@
+ Java Swing Scroll https://stackoverflow.com/questions/8375022/joptionpane-and-scroll-function
+ Java Swing Scroll https://docs.oracle.com/javase/tutorial/uiswing/
+ Java Swing Scroll https://docs.oracle.com/javase/tutorial/uiswing/components/scrollpane.html
+ Boyer-Moore https://www.youtube.com/watch?v=4Xyhb72LCX4
