@@ -39,8 +39,8 @@ public class Main {
         // Close program if X in the top right corner of the frame is clicked on.
         myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        final String states = "Alabama Alaska Arizona Arkansas California Colorado Connecticut Delaware Florida Georgia Hawaii Idaho Illinois Indiana Iowa Kansas Kentucky Louisiana Maine Maryland Massachusetts Michigan Minnesota Mississippi Missouri Montana Nebraska Nevada New Hampshire New Jersey New Mexico New York North Carolina North Dakota Ohio Oklahoma Oregon Pennsylvania Rhode Island South Carolina South Dakota Tennessee Texas Utah Vermont Virginia Washington West Virginia Wisconsin Wyoming";
-
+        //final String states = "Alabama Alaska Arizona Arkansas California Colorado Connecticut Delaware Florida Georgia Hawaii Idaho Illinois Indiana Iowa Kansas Kentucky Louisiana Maine Maryland Massachusetts Michigan Minnesota Mississippi Missouri Montana Nebraska Nevada New Hampshire New Jersey New Mexico New York North Carolina North Dakota Ohio Oklahoma Oregon Pennsylvania Rhode Island South Carolina South Dakota Tennessee Texas Utah Vermont Virginia Washington West Virginia Wisconsin Wyoming";
+        final String states = "Alabama";
 
         button1Display.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -107,7 +107,7 @@ public class Main {
             public void actionPerformed(ActionEvent e) {
                 String searchString = JOptionPane.showInputDialog("Enter letters to search on? ");
 
-                List<String> searchComparison = new ArrayList<>();
+                List<Character> searchComparison = new ArrayList<>();
                 List<Integer> matchOutput = new ArrayList<>();
 
                 JTextArea textArea = new JTextArea();
@@ -120,21 +120,15 @@ public class Main {
                 // Ensuring that we go through the entirety of states string.
                 while (i < states.length()) {
                     loadList(searchComparison, states, i, searchString.length());
+                    i = checkMismatch(searchComparison, searchString, searchString.length(), i, matchOutput);
+                     // all characters are a match then i needs to be updated to move past current selection
+
+
 
                 }
 
 
-                // method checkMatchSubstring it's purpose is to see if the bad character matches any character in the substring or not.
-                //   If the bad character does exist in substring then move i to where the bad char matches the character in searchString.
-                // call method moveToMatch
-                // for each element of searchString
-                // if bad Character== searchString(i)
-                // move i to where the bad character matches the character in searchString.
 
-                //   If the bad character does not exist in the substring then move past the mismatch.
-                // call method movePastMismatch
-                //move past bad character
-                // i = i + (k+2);
                 textArea.append(matchOutput + "\n");
                 JOptionPane.showMessageDialog(null, scrollPane, "List of indices where matches have been made.", JOptionPane.PLAIN_MESSAGE);
             }});
@@ -153,43 +147,79 @@ public class Main {
 
     }
 
-    public static void loadList(List<String> searchComparison, String states, int i, int length)
+    public static void loadList(List<Character> searchComparison, String states, int i, int length)
     {
         searchComparison.clear();
-        int m = i;
+        int m = 0;
 
         while (m < length) {
             //add each character from state(m) to searchComparison list (m-m).
-            searchComparison.add(Character.toString(states.charAt(m)));
+            searchComparison.add(states.charAt(m+i));
             m++;
         }
     }
 
     // method checkMismatch to identify if there is a mismatch with each character of searchString starting from the right.
-    public static void checkMismatch(List<String> searchComparison, String searchString, int searchStringLength, int i){
-    // must check front right to left
+    public static Integer checkMismatch(List<Character> searchComparison, String searchString, int searchStringLength, int i, List<Integer> matchOutput) {
+        // must check front right to left
         int k = searchStringLength - 1;
         while (k >= 0) {
-    //check if each character does not match each other.ie bad character
-        if (searchComparison(k) != searchString(k)) {
-            //call checkMatchSubstring (k)
+            // if we are at the end of the string of characters
 
-         break;
+
+            //check if each character does not match
+            if (searchComparison.get(k) != searchString.charAt(k)) {
+                if (i!=0){
+                    // Bad character has been found we must check if we need to move past it or if we have a match with it can we move to it.
+                    checkMatchSubstring( k, searchComparison, searchString, i);
+                    return i++;
+                }
+                return i++;
+            }
+
+
+            // check if each character matches each other.
+            if (searchComparison.get(k) == searchString.charAt(k)) {
+                //k must be decremented so
+                k--;
+            }
+
+
+
         }
+        //if(k < 0) {
+            // add index of first character where match started to searchComparison list.
+            matchOutput.add(i);
+            return i + searchString.length()+1;
+        //}
+
+    }
+    // The purpose is to see if the bad character matches any character in the substring or not.
+    public static Integer checkMatchSubstring (int k, List<Character> searchComparison, String searchString, int i)
+        {
+            int j = k-1;
+            while(j>=0)
+            {
+             if (searchComparison.get(k) == searchString.charAt(j)){
+                // move i to where the bad character matches the character in searchString.
+                  return i = i + (k);
+
+                }
 
 
-    // check if each character matches each other.
-      if (searchComparison(k) == searchString(k)) {
 
-      }
-       if (k == 0) {
-           // add index of first character where match started to searchComparison list.
-           searchComparison.add(Integer.toString(i));
-           break;
-        }
-    //k must be decremented so the while loop ends.
-       k--;
-     }
+
+            }
+            // If the bad character does not exist in the substring then move past the mismatch.
+            //move past bad character
+            //if (j < 0) {
+                return i = i + (k+1);
+
+            //}
+
+         }
+
+
 
 }
 
