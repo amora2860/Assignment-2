@@ -40,7 +40,7 @@ public class Main {
         myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //final String states = "Alabama Alaska Arizona Arkansas California Colorado Connecticut Delaware Florida Georgia Hawaii Idaho Illinois Indiana Iowa Kansas Kentucky Louisiana Maine Maryland Massachusetts Michigan Minnesota Mississippi Missouri Montana Nebraska Nevada New Hampshire New Jersey New Mexico New York North Carolina North Dakota Ohio Oklahoma Oregon Pennsylvania Rhode Island South Carolina South Dakota Tennessee Texas Utah Vermont Virginia Washington West Virginia Wisconsin Wyoming";
-        final String states = "Alabama";
+        final String states = "Alabama Alaska Arizona Arkansas";
 
         button1Display.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -119,15 +119,15 @@ public class Main {
                 int i = 0;
                 // Ensuring that we go through the entirety of states string.
                 while (i < states.length()) {
+                    // The loop must end since we won't be able to have a match since the characters left are too short to compare.
+                    if ( (states.length() - i) < searchString.length())
+                    {
+                        break;
+                    }
                     loadList(searchComparison, states, i, searchString.length());
                     i = checkMismatch(searchComparison, searchString, searchString.length(), i, matchOutput);
                      // all characters are a match then i needs to be updated to move past current selection
-
-
-
                 }
-
-
 
                 textArea.append(matchOutput + "\n");
                 JOptionPane.showMessageDialog(null, scrollPane, "List of indices where matches have been made.", JOptionPane.PLAIN_MESSAGE);
@@ -151,6 +151,7 @@ public class Main {
     {
         searchComparison.clear();
         int m = 0;
+        // if we are at the end of the states string and have
 
         while (m < length) {
             //add each character from state(m) to searchComparison list (m-m).
@@ -161,20 +162,21 @@ public class Main {
 
     // method checkMismatch to identify if there is a mismatch with each character of searchString starting from the right.
     public static Integer checkMismatch(List<Character> searchComparison, String searchString, int searchStringLength, int i, List<Integer> matchOutput) {
-        // must check front right to left
+        // must check from right to left
         int k = searchStringLength - 1;
         while (k >= 0) {
             // if we are at the end of the string of characters
 
 
             //check if each character does not match
-            if (searchComparison.get(k) != searchString.charAt(k)) {
-                if (i!=0){
+            if (searchComparison.get(k) != searchString.charAt(k))
+            {
+                if (k>=0){
                     // Bad character has been found we must check if we need to move past it or if we have a match with it can we move to it.
-                    checkMatchSubstring( k, searchComparison, searchString, i);
-                    return i++;
+                    i = checkMatchSubstring( k, searchComparison, searchString, i);
+                    return i;
                 }
-                return i++;
+                return i + searchStringLength;
             }
 
 
@@ -198,24 +200,22 @@ public class Main {
     public static Integer checkMatchSubstring (int k, List<Character> searchComparison, String searchString, int i)
         {
             int j = k-1;
+            // for each element of searhstring we need to check against...
             while(j>=0)
             {
              if (searchComparison.get(k) == searchString.charAt(j)){
                 // move i to where the bad character matches the character in searchString.
-                  return i = i + (k);
+                 return i + k;
+
 
                 }
-
-
-
-
+                j--;
             }
             // If the bad character does not exist in the substring then move past the mismatch.
             //move past bad character
-            //if (j < 0) {
-                return i = i + (k+1);
 
-            //}
+                return i + (k+1);
+
 
          }
 
