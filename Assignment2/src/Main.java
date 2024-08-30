@@ -39,8 +39,8 @@ public class Main {
         // Close program if X in the top right corner of the frame is clicked on.
         myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //final String states = "Alabama Alaska Arizona Arkansas California Colorado Connecticut Delaware Florida Georgia Hawaii Idaho Illinois Indiana Iowa Kansas Kentucky Louisiana Maine Maryland Massachusetts Michigan Minnesota Mississippi Missouri Montana Nebraska Nevada New Hampshire New Jersey New Mexico New York North Carolina North Dakota Ohio Oklahoma Oregon Pennsylvania Rhode Island South Carolina South Dakota Tennessee Texas Utah Vermont Virginia Washington West Virginia Wisconsin Wyoming";
-        final String states = "Alabama Alaska Arizona Arkansas";
+        final String states = "Alabama Alaska Arizona Arkansas California Colorado Connecticut Delaware Florida Georgia Hawaii Idaho Illinois Indiana Iowa Kansas Kentucky Louisiana Maine Maryland Massachusetts Michigan Minnesota Mississippi Missouri Montana Nebraska Nevada New Hampshire New Jersey New Mexico New York North Carolina North Dakota Ohio Oklahoma Oregon Pennsylvania Rhode Island South Carolina South Dakota Tennessee Texas Utah Vermont Virginia Washington West Virginia Wisconsin Wyoming";
+
 
         button1Display.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -51,6 +51,7 @@ public class Main {
                 for(int i = 0; i < printingStates.length; i++)
                 // Condition one if the word is New.
                 {   // Add New and the next word into that array together.
+                    // This should be simplified so that New or North or South or West triggers the same code to print.
                     switch (printingStates[i]) {
                         case "New" -> {
 
@@ -171,6 +172,7 @@ public class Main {
             //check if each character does not match
             if (searchComparison.get(k) != searchString.charAt(k))
             {
+                // If we are at the end of the searchString and non match then we need to move past the bad character.
                 if (k>=0){
                     // Bad character has been found we must check if we need to move past it or if we have a match with it can we move to it.
                     i = checkMatchSubstring( k, searchComparison, searchString, i);
@@ -192,7 +194,7 @@ public class Main {
         //if(k < 0) {
             // add index of first character where match started to searchComparison list.
             matchOutput.add(i);
-            return i + searchString.length()+1;
+            return i + searchString.length();
         //}
 
     }
@@ -205,7 +207,7 @@ public class Main {
             {
              if (searchComparison.get(k) == searchString.charAt(j)){
                 // move i to where the bad character matches the character in searchString.
-                 return i + k;
+                 return i + (k-j);
 
 
                 }
