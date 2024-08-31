@@ -2,3 +2,4 @@
  Java Swing Scroll https://docs.oracle.com/javase/tutorial/uiswing/
  Java Swing Scroll https://docs.oracle.com/javase/tutorial/uiswing/components/scrollpane.html
  Boyer-Moore https://www.youtube.com/watch?v=4Xyhb72LCX4
+ Issue with clipboard paste https://stackoverflow.com/questions/78081711/java-uncatchable-classnotfoundexception-when-using-java-awt-clipboard

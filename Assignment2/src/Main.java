@@ -1,10 +1,13 @@
 
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
 import java.awt.event.*;
-import java.awt.Dimension;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class Main {
 
@@ -24,7 +27,7 @@ public class Main {
         myFrame.setLayout(null);
         myFrame.setVisible(true);
 
-        // Setting the absolute positions for all of the buttons.
+        // Setting the absolute positions for all the buttons.
         button1Display.setBounds(100, 50, 200, 40);
         button2Search.setBounds(100, 100, 200, 40);
         button7Exit.setBounds(100, 150, 200, 40);
@@ -41,63 +44,33 @@ public class Main {
 
         final String states = "Alabama Alaska Arizona Arkansas California Colorado Connecticut Delaware Florida Georgia Hawaii Idaho Illinois Indiana Iowa Kansas Kentucky Louisiana Maine Maryland Massachusetts Michigan Minnesota Mississippi Missouri Montana Nebraska Nevada New Hampshire New Jersey New Mexico New York North Carolina North Dakota Ohio Oklahoma Oregon Pennsylvania Rhode Island South Carolina South Dakota Tennessee Texas Utah Vermont Virginia Washington West Virginia Wisconsin Wyoming";
 
-
         button1Display.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 //Make these into array list
                 String[] printingStates = states.split(" ");
                 List<String> printingStates2 = new ArrayList<>();
-                // String Array that splits on seperate criteria.
+                // String Array that splits on separate criteria.
                 for(int i = 0; i < printingStates.length; i++)
-                // Condition one if the word is New.
-                {   // Add New and the next word into that array together.
-                    // This should be simplified so that New or North or South or West triggers the same code to print.
-                    switch (printingStates[i]) {
-                        case "New" -> {
-
-                            printingStates2.add(printingStates[i] + " " + printingStates[i + 1]);
-                            i++;
-                        }
-
-
-                        // Condition two if the word is North.
-                        case "North" -> {
-                            // Add North and the next word into that array together.
-                            printingStates2.add(printingStates[i] + " " + printingStates[i + 1]);
-                            i++;
-                        }
-
-                        // Condition three if the word is South.
-                        case "South" -> {
-                            // Add South and the next word into that array together.
-                            printingStates2.add(printingStates[i] + " " + printingStates[i + 1]);
-                            i++;
-                        }
-
-                        // Condition four if the word is West.
-                        case "West" -> {
-                            // Add West and the next word into that array together.
-                            printingStates2.add(printingStates[i] + " " + printingStates[i + 1]);
-                            i++;
-                        }
-                        default -> printingStates2.add(printingStates[i]);
+                {
+                    // Check the string for states that contain two words. Any states that contain two words include New, North, South and West.
+                    if (printingStates[i].equals("New") || printingStates[i].equals("North") || printingStates[i].equals("South") || printingStates[i].equals("West")){
+                    printingStates2.add(printingStates[i] + " " + printingStates[i + 1]);
+                    i++;
+                    }
+                    else{
+                        printingStates2.add(printingStates[i]);
                     }
 
-
-
                 }
+
                 JTextArea textArea = new JTextArea();
                 JScrollPane scrollPane = new JScrollPane(textArea);
                 scrollPane.setPreferredSize(new Dimension(100, 100));
                 textArea.setWrapStyleWord(true);
-                scrollPane.setVerticalScrollBarPolicy(
-                        JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
-
+                scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
                 for(String state: printingStates2)
                     textArea.append(state + "\n");
-
 
                 JOptionPane.showMessageDialog(null, scrollPane, "List of states", JOptionPane.PLAIN_MESSAGE);
 
@@ -106,7 +79,25 @@ public class Main {
 
         button2Search.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String searchString = JOptionPane.showInputDialog("Enter letters to search on? ");
+
+                static String getClipboard() {
+                    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                    try {
+                        // Note that it is still possible for another app to modify clipboard
+                        // between "if" and "return", so this could still fail:
+                        if (clipboard.isDataFlavorAvailable(DataFlavor.stringFlavor)) {
+                            return (String) clipboard.getData(DataFlavor.stringFlavor);
+                        }
+                    } catch (Exception eew) {
+                        // or rethrow as your own exception type
+                    }
+                    return "";
+                }
+                    String searchString = JOptionPane.showInputDialog("Enter letters to search on? ");
+
+
+                    JOptionPane.showMessageDialog(null, "Copy and Paste is not supported.");
+
 
                 List<Character> searchComparison = new ArrayList<>();
                 List<Integer> matchOutput = new ArrayList<>();
@@ -127,7 +118,6 @@ public class Main {
                     }
                     loadList(searchComparison, states, i, searchString.length());
                     i = checkMismatch(searchComparison, searchString, searchString.length(), i, matchOutput);
-                     // all characters are a match then i needs to be updated to move past current selection
                 }
 
                 textArea.append(matchOutput + "\n");
@@ -140,19 +130,15 @@ public class Main {
                 System.exit(0);
             }
         });
-
-
-
         // method to load the states characters into an array starting at i and ending at searchString.length(). (pass in i so starting point is correct)
-
 
     }
 
     public static void loadList(List<Character> searchComparison, String states, int i, int length)
     {
+        // We need to start with an empty list each time.
         searchComparison.clear();
         int m = 0;
-        // if we are at the end of the states string and have
 
         while (m < length) {
             //add each character from state(m) to searchComparison list (m-m).
@@ -172,7 +158,7 @@ public class Main {
             //check if each character does not match
             if (searchComparison.get(k) != searchString.charAt(k))
             {
-                // If we are at the end of the searchString and non match then we need to move past the bad character.
+                // If we are at the end of the searchString and there is a non match then we need to move past the bad character.
                 if (k>=0){
                     // Bad character has been found we must check if we need to move past it or if we have a match with it can we move to it.
                     i = checkMatchSubstring( k, searchComparison, searchString, i);
@@ -181,35 +167,28 @@ public class Main {
                 return i + searchStringLength;
             }
 
-
             // check if each character matches each other.
             if (searchComparison.get(k) == searchString.charAt(k)) {
                 //k must be decremented so
                 k--;
             }
 
-
-
         }
-        //if(k < 0) {
             // add index of first character where match started to searchComparison list.
             matchOutput.add(i);
             return i + searchString.length();
-        //}
 
     }
     // The purpose is to see if the bad character matches any character in the substring or not.
     public static Integer checkMatchSubstring (int k, List<Character> searchComparison, String searchString, int i)
         {
             int j = k-1;
-            // for each element of searhstring we need to check against...
+            // for each element of searchString we need to check against...
             while(j>=0)
             {
              if (searchComparison.get(k) == searchString.charAt(j)){
                 // move i to where the bad character matches the character in searchString.
                  return i + (k-j);
-
-
                 }
                 j--;
             }
