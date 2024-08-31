@@ -1,18 +1,18 @@
 
 
 import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class Main {
 
 
     public static void main(String[] args) {
+        /*
         // Creating the instance with labeling for the frame and each button.
         JFrame myFrame = new JFrame("Assignment #2");
         JButton button1Display = new JButton("Display the text");
@@ -41,89 +41,31 @@ public class Main {
 
         // Close program if X in the top right corner of the frame is clicked on.
         myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+*/
         final String states = "Alabama Alaska Arizona Arkansas California Colorado Connecticut Delaware Florida Georgia Hawaii Idaho Illinois Indiana Iowa Kansas Kentucky Louisiana Maine Maryland Massachusetts Michigan Minnesota Mississippi Missouri Montana Nebraska Nevada New Hampshire New Jersey New Mexico New York North Carolina North Dakota Ohio Oklahoma Oregon Pennsylvania Rhode Island South Carolina South Dakota Tennessee Texas Utah Vermont Virginia Washington West Virginia Wisconsin Wyoming";
+        System.out.println("Please enter your choice (1), (2) or (3).");
+        System.out.println("1 Display the text");
+        System.out.println("2 Search");
+        System.out.println("3 Exit program");
+        Scanner scanner = new Scanner(System.in);
+        int choice = scanner.nextInt();
+//need a while loop that allows the menu to stay up when choices 1 , 2 are selected.
+        if(choice == 1) {
 
-        button1Display.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                //Make these into array list
-                String[] printingStates = states.split(" ");
-                List<String> printingStates2 = new ArrayList<>();
-                // String Array that splits on separate criteria.
-                for(int i = 0; i < printingStates.length; i++)
-                {
-                    // Check the string for states that contain two words. Any states that contain two words include New, North, South and West.
-                    if (printingStates[i].equals("New") || printingStates[i].equals("North") || printingStates[i].equals("South") || printingStates[i].equals("West")){
-                    printingStates2.add(printingStates[i] + " " + printingStates[i + 1]);
-                    i++;
-                    }
-                    else{
-                        printingStates2.add(printingStates[i]);
-                    }
+            System.out.println(states);
+        }
+        if(choice == 2) {
+            System.out.println("Please enter the string of characters you would like to search for?");
+            String searchString = scanner.nextLine();
+            badCharacter(searchString, states);
+        }
 
-                }
-
-                JTextArea textArea = new JTextArea();
-                JScrollPane scrollPane = new JScrollPane(textArea);
-                scrollPane.setPreferredSize(new Dimension(100, 100));
-                textArea.setWrapStyleWord(true);
-                scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
-                for(String state: printingStates2)
-                    textArea.append(state + "\n");
-
-                JOptionPane.showMessageDialog(null, scrollPane, "List of states", JOptionPane.PLAIN_MESSAGE);
-
-            }
-        });
-
-        button2Search.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-
-                static String getClipboard() {
-                    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-                    try {
-                        // Note that it is still possible for another app to modify clipboard
-                        // between "if" and "return", so this could still fail:
-                        if (clipboard.isDataFlavorAvailable(DataFlavor.stringFlavor)) {
-                            return (String) clipboard.getData(DataFlavor.stringFlavor);
-                        }
-                    } catch (Exception eew) {
-                        // or rethrow as your own exception type
-                    }
-                    return "";
-                }
-                    String searchString = JOptionPane.showInputDialog("Enter letters to search on? ");
+        if(choice == 3) {
+            System.exit(0);
+        }
 
 
-                    JOptionPane.showMessageDialog(null, "Copy and Paste is not supported.");
-
-
-                List<Character> searchComparison = new ArrayList<>();
-                List<Integer> matchOutput = new ArrayList<>();
-
-                JTextArea textArea = new JTextArea();
-                JScrollPane scrollPane = new JScrollPane(textArea);
-                scrollPane.setPreferredSize(new Dimension(100, 100));
-                textArea.setWrapStyleWord(true);
-                scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
-                int i = 0;
-                // Ensuring that we go through the entirety of states string.
-                while (i < states.length()) {
-                    // The loop must end since we won't be able to have a match since the characters left are too short to compare.
-                    if ( (states.length() - i) < searchString.length())
-                    {
-                        break;
-                    }
-                    loadList(searchComparison, states, i, searchString.length());
-                    i = checkMismatch(searchComparison, searchString, searchString.length(), i, matchOutput);
-                }
-
-                textArea.append(matchOutput + "\n");
-                JOptionPane.showMessageDialog(null, scrollPane, "List of indices where matches have been made.", JOptionPane.PLAIN_MESSAGE);
-            }});
-
+/*
         // This button exits the program when clicked.
         button7Exit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -131,9 +73,29 @@ public class Main {
             }
         });
         // method to load the states characters into an array starting at i and ending at searchString.length(). (pass in i so starting point is correct)
-
+*/
     }
+    public static void badCharacter(String input, String states)
+    {
+        List<Character> searchComparison = new ArrayList<>();
+        List<Integer> matchOutput = new ArrayList<>();
+        int i = 0;
+        // Ensuring that we go through the entirety of states string.
+        while (i < states.length()) {
+            // The loop must end since we won't be able to have a match since the characters left are too short to compare.
+            if ( (states.length() - i) < input.length())
+            {
+                break;
+            }
+            loadList(searchComparison, states, i, input.length());
+            i = checkMismatch(searchComparison, input, input.length(), i, matchOutput);
+            System.out.println(i);
+        }
+        System.out.println(matchOutput);
 
+        //textArea.append(matchOutput + "\n");
+        //JOptionPane.showMessageDialog(null, scrollPane, "List of indices where matches have been made.", JOptionPane.PLAIN_MESSAGE);
+    }
     public static void loadList(List<Character> searchComparison, String states, int i, int length)
     {
         // We need to start with an empty list each time.
@@ -199,8 +161,6 @@ public class Main {
 
 
          }
-
-
 
 }
 
